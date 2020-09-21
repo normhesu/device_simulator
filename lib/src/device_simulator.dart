@@ -6,11 +6,17 @@ import 'package:flutter/material.dart';
 
 import 'package:custom_navigator/custom_navigator.dart';
 
+import '../device_simulator.dart';
 import 'device_specification.dart';
 import 'disabled.dart';
 import 'fake_android_status_bar.dart';
 import 'fake_ios_status_bar.dart';
 import 'apple_icon.dart';
+
+enum ToolbarPosition {
+  top,
+  bottom,
+}
 
 const double _kSettingsHeight = 72.0;
 final Color _kBackgroundColor = Colors.grey[900];
@@ -94,6 +100,8 @@ class DeviceSimulator extends StatefulWidget {
   /// A flag to enable/disable screenshots button
   final bool enableScreenshots;
 
+  final ToolbarPosition toolbarPosition;
+
   /// Creates a new [DeviceSimulator].
   DeviceSimulator({
     @required this.child,
@@ -103,6 +111,7 @@ class DeviceSimulator extends StatefulWidget {
     this.androidShowNavigationBar = true,
     this.androidStatusBarBackgroundColor = Colors.black26,
     this.silentlyDisableOnSmallDevices = false,
+    this.toolbarPosition = ToolbarPosition.bottom,
     double smallDeviceWidth,
     double smallDeviceHeight,
     this.initialPlatform = TargetPlatform.iOS,
@@ -354,10 +363,138 @@ class _DeviceSimulatorState extends State<DeviceSimulator> {
       ],
     );
 
+    final _toolbar = Container(
+      height: _kSettingsHeight,
+      color: Colors.black,
+      padding: EdgeInsets.only(
+          left: 16.0 + mq.padding.left,
+          right: 16.0 + mq.padding.right,
+          bottom: mq.padding.bottom),
+      child: Row(
+        crossAxisAlignment: CrossAxisAlignment.center,
+        children: <Widget>[
+          if (_hasAndroidSpecs)
+            IconButton(
+              icon: Icon(
+                Icons.android,
+                color: _platform == TargetPlatform.android
+                    ? Colors.white
+                    : Colors.white24,
+                size: 22.0,
+              ),
+              onPressed: () {
+                if (_platform == TargetPlatform.android) {
+                  return;
+                }
+                setState(() {
+                  _platform = TargetPlatform.android;
+                  _currentDevice = 0;
+                });
+              },
+            ),
+          if (_hasIosSpecs)
+            IconButton(
+              icon: Icon(
+                IconApple.apple, // TODO: better image
+                color: _platform == TargetPlatform.iOS
+                    ? Colors.white
+                    : Colors.white24,
+                size: 20.0,
+              ),
+              onPressed: () {
+                if (_platform == TargetPlatform.iOS) {
+                  return;
+                }
+                setState(() {
+                  _platform = TargetPlatform.iOS;
+                  _currentDevice = 0;
+                });
+              },
+            ),
+          if (widget.enableScreenshots)
+            VerticalDivider(
+              color: _kDividerColor,
+              indent: 4.0,
+            ),
+          if (widget.enableScreenshots)
+            IconButton(
+              icon: const Icon(Icons.camera_alt),
+              color: Colors.white,
+              onPressed: () {
+                setState(() {
+                  _screenshotMode = true;
+                });
+              },
+            ),
+          VerticalDivider(
+            color: _kDividerColor,
+            indent: 4.0,
+          ),
+          Container(
+            padding: const EdgeInsets.only(left: 8.0),
+            width: 120.0,
+            child: Column(
+              mainAxisSize: MainAxisSize.min,
+              crossAxisAlignment: CrossAxisAlignment.start,
+              children: <Widget>[
+                Row(
+                  mainAxisSize: MainAxisSize.min,
+                  children: <Widget>[
+                    Text(
+                      '${simulatedSize.width.round()} px',
+                      style: _kTextStyle.copyWith(
+                          color: overflowWidth ? Colors.orange : null),
+                    ),
+                    const Text(
+                      ' • ',
+                      style: _kTextStyle,
+                    ),
+                    Text(
+                      '${simulatedSize.height.round()} px',
+                      style: _kTextStyle.copyWith(
+                          color: overflowHeight ? Colors.orange : null),
+                    ),
+                  ],
+                ),
+                Padding(
+                  padding: const EdgeInsets.only(top: 4.0),
+                  child: Text(
+                    spec.name,
+                    style: _kTextStyle.copyWith(
+                        color: Colors.white54, fontSize: 10.0),
+                    maxLines: 1,
+                    overflow: TextOverflow.ellipsis,
+                    textAlign: TextAlign.start,
+                  ),
+                ),
+              ],
+            ),
+          ),
+          if (specs.length > 1)
+            Expanded(
+              child: Slider(
+                divisions: specs.length - 1,
+                min: 0.0,
+                max: (specs.length - 1).toDouble(),
+                value: _currentDevice.toDouble(),
+                label: spec.name,
+                onChanged: (double device) {
+                  setState(() {
+                    _currentDevice = device.round();
+                  });
+                },
+              ),
+            ),
+        ],
+      ),
+    );
+
     final screen = Material(
       color: _kBackgroundColor,
       child: Column(
         children: <Widget>[
+          if (!_screenshotMode && widget.toolbarPosition == ToolbarPosition.top)
+            _toolbar,
           Expanded(
             child: Align(
               alignment: _screenshotMode ? Alignment.topLeft : Alignment.center,
@@ -368,132 +505,9 @@ class _DeviceSimulatorState extends State<DeviceSimulator> {
               ),
             ),
           ),
-          if (!_screenshotMode)
-            Container(
-              height: _kSettingsHeight,
-              color: Colors.black,
-              padding: EdgeInsets.only(
-                  left: 16.0 + mq.padding.left,
-                  right: 16.0 + mq.padding.right,
-                  bottom: mq.padding.bottom),
-              child: Row(
-                crossAxisAlignment: CrossAxisAlignment.center,
-                children: <Widget>[
-                  if (_hasAndroidSpecs)
-                    IconButton(
-                      icon: Icon(
-                        Icons.android,
-                        color: _platform == TargetPlatform.android
-                            ? Colors.white
-                            : Colors.white24,
-                        size: 22.0,
-                      ),
-                      onPressed: () {
-                        if (_platform == TargetPlatform.android) {
-                          return;
-                        }
-                        setState(() {
-                          _platform = TargetPlatform.android;
-                          _currentDevice = 0;
-                        });
-                      },
-                    ),
-                  if (_hasIosSpecs)
-                    IconButton(
-                      icon: Icon(
-                        IconApple.apple, // TODO: better image
-                        color: _platform == TargetPlatform.iOS
-                            ? Colors.white
-                            : Colors.white24,
-                        size: 20.0,
-                      ),
-                      onPressed: () {
-                        if (_platform == TargetPlatform.iOS) {
-                          return;
-                        }
-                        setState(() {
-                          _platform = TargetPlatform.iOS;
-                          _currentDevice = 0;
-                        });
-                      },
-                    ),
-                  if (widget.enableScreenshots)
-                    VerticalDivider(
-                      color: _kDividerColor,
-                      indent: 4.0,
-                    ),
-                  if (widget.enableScreenshots)
-                    IconButton(
-                      icon: const Icon(Icons.camera_alt),
-                      color: Colors.white,
-                      onPressed: () {
-                        setState(() {
-                          _screenshotMode = true;
-                        });
-                      },
-                    ),
-                  VerticalDivider(
-                    color: _kDividerColor,
-                    indent: 4.0,
-                  ),
-                  Container(
-                    padding: const EdgeInsets.only(left: 8.0),
-                    width: 120.0,
-                    child: Column(
-                      mainAxisSize: MainAxisSize.min,
-                      crossAxisAlignment: CrossAxisAlignment.start,
-                      children: <Widget>[
-                        Row(
-                          mainAxisSize: MainAxisSize.min,
-                          children: <Widget>[
-                            Text(
-                              '${simulatedSize.width.round()} px',
-                              style: _kTextStyle.copyWith(
-                                  color: overflowWidth ? Colors.orange : null),
-                            ),
-                            const Text(
-                              ' • ',
-                              style: _kTextStyle,
-                            ),
-                            Text(
-                              '${simulatedSize.height.round()} px',
-                              style: _kTextStyle.copyWith(
-                                  color: overflowHeight ? Colors.orange : null),
-                            ),
-                          ],
-                        ),
-                        Padding(
-                          padding: const EdgeInsets.only(top: 4.0),
-                          child: Text(
-                            spec.name,
-                            style: _kTextStyle.copyWith(
-                                color: Colors.white54, fontSize: 10.0),
-                            maxLines: 1,
-                            overflow: TextOverflow.ellipsis,
-                            textAlign: TextAlign.start,
-                          ),
-                        ),
-                      ],
-                    ),
-                  ),
-                  if (specs.length > 1)
-                    Expanded(
-                      child: Slider(
-                        divisions: specs.length - 1,
-                        min: 0.0,
-                        max: (specs.length - 1).toDouble(),
-                        value: _currentDevice.toDouble(),
-                        label: spec.name,
-                        onChanged: (double device) {
-                          setState(() {
-                            _currentDevice = device.round();
-                          });
-                        },
-                      ),
-                    ),
-                ],
-              ),
-            ),
+          if (!_screenshotMode &&
+              widget.toolbarPosition == ToolbarPosition.bottom)
+            _toolbar,
         ],
       ),
     );
