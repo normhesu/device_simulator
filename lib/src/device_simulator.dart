@@ -15,7 +15,7 @@ import 'apple_icon.dart';
 const double _kSettingsHeight = 72.0;
 final Color _kBackgroundColor = Colors.grey[900];
 final Color _kDividerColor = Colors.grey[700];
-final _kTextStyle = TextStyle(
+const _kTextStyle = TextStyle(
   color: Colors.white,
   fontFamilyFallback: ['.SF UI Text', 'Roboto'],
   fontSize: 12.0,
@@ -120,12 +120,13 @@ class DeviceSimulator extends StatefulWidget {
         smallDeviceWidth = smallDeviceWidth ?? smallDeviceHeight ?? 768.0,
         smallDeviceHeight = smallDeviceHeight ?? smallDeviceWidth ?? 768.0;
 
+  @override
   _DeviceSimulatorState createState() => _DeviceSimulatorState();
 }
 
 class _DeviceSimulatorState extends State<DeviceSimulator> {
-  Key _contentKey = UniqueKey();
-  Key _navigatorKey = GlobalKey<NavigatorState>();
+  final Key _contentKey = UniqueKey();
+  final Key _navigatorKey = GlobalKey<NavigatorState>();
   List<DeviceSpecification> _specs = [];
   bool _hasIosSpecs = false;
   bool _hasAndroidSpecs = false;
@@ -154,6 +155,7 @@ class _DeviceSimulatorState extends State<DeviceSimulator> {
   }
 
   void _processSpecs() {
+    // ignore: unnecessary_parenthesis
     _specs = (widget.specs ?? DeviceSpecification.specs);
     _hasIosSpecs = _specs.any((dev) => dev.platform == TargetPlatform.iOS);
     _hasAndroidSpecs =
@@ -180,8 +182,8 @@ class _DeviceSimulatorState extends State<DeviceSimulator> {
   }
 
   Widget _build(BuildContext context) {
-    var mq = MediaQuery.of(context);
-    var theme = Theme.of(context);
+    final mq = MediaQuery.of(context);
+    //final theme = Theme.of(context);
 
     if (mq.size.width < widget.smallDeviceWidth ||
         mq.size.height < widget.smallDeviceHeight) {
@@ -194,8 +196,9 @@ class _DeviceSimulatorState extends State<DeviceSimulator> {
       );
     }
 
-    var specs = _specs.where((device) => device.platform == _platform).toList();
-    var spec = specs[_currentDevice];
+    final specs =
+        _specs.where((device) => device.platform == _platform).toList();
+    final spec = specs[_currentDevice];
 
     Size simulatedSize = spec.size;
     if (mq.orientation == Orientation.landscape)
@@ -213,14 +216,14 @@ class _DeviceSimulatorState extends State<DeviceSimulator> {
       overflowWidth = true;
     }
 
-    double settingsHeight = _screenshotMode ? 0.0 : _kSettingsHeight;
+    final double settingsHeight = _screenshotMode ? 0.0 : _kSettingsHeight;
     if (simulatedSize.height > mq.size.height - settingsHeight) {
       simulatedSize =
           Size(simulatedSize.width, mq.size.height - settingsHeight);
       overflowHeight = true;
     }
 
-    double cornerRadius = _screenshotMode ? 0.0 : spec.cornerRadius;
+    final double cornerRadius = _screenshotMode ? 0.0 : spec.cornerRadius;
 
     EdgeInsets padding = spec.padding;
     if (mq.orientation == Orientation.landscape &&
@@ -262,7 +265,8 @@ class _DeviceSimulatorState extends State<DeviceSimulator> {
       }).toList();
     }
 
-    Size notchSize = _screenshotMode ? Size.zero : spec.notchSize ?? Size.zero;
+    final Size notchSize =
+        _screenshotMode ? Size.zero : spec.notchSize ?? Size.zero;
     Widget notch;
     if (mq.orientation == Orientation.landscape) {
       notch = Positioned(
@@ -298,7 +302,7 @@ class _DeviceSimulatorState extends State<DeviceSimulator> {
       );
     }
 
-    Widget fakeStatusBar = Positioned(
+    final Widget fakeStatusBar = Positioned(
       left: 0.0,
       right: 0.0,
       height: padding.top,
@@ -350,7 +354,7 @@ class _DeviceSimulatorState extends State<DeviceSimulator> {
       ],
     );
 
-    var screen = Material(
+    final screen = Material(
       color: _kBackgroundColor,
       child: Column(
         children: <Widget>[
@@ -420,7 +424,7 @@ class _DeviceSimulatorState extends State<DeviceSimulator> {
                     ),
                   if (widget.enableScreenshots)
                     IconButton(
-                      icon: Icon(Icons.camera_alt),
+                      icon: const Icon(Icons.camera_alt),
                       color: Colors.white,
                       onPressed: () {
                         setState(() {
@@ -433,7 +437,7 @@ class _DeviceSimulatorState extends State<DeviceSimulator> {
                     indent: 4.0,
                   ),
                   Container(
-                    padding: EdgeInsets.only(left: 8.0),
+                    padding: const EdgeInsets.only(left: 8.0),
                     width: 120.0,
                     child: Column(
                       mainAxisSize: MainAxisSize.min,
@@ -447,7 +451,7 @@ class _DeviceSimulatorState extends State<DeviceSimulator> {
                               style: _kTextStyle.copyWith(
                                   color: overflowWidth ? Colors.orange : null),
                             ),
-                            Text(
+                            const Text(
                               ' • ',
                               style: _kTextStyle,
                             ),
@@ -459,7 +463,7 @@ class _DeviceSimulatorState extends State<DeviceSimulator> {
                           ],
                         ),
                         Padding(
-                          padding: EdgeInsets.only(top: 4.0),
+                          padding: const EdgeInsets.only(top: 4.0),
                           child: Text(
                             spec.name,
                             style: _kTextStyle.copyWith(
@@ -605,6 +609,7 @@ class _CornerOverlay extends StatelessWidget {
   final double radius;
   final Alignment alignment;
 
+  @override
   Widget build(BuildContext context) {
     return CustomPaint(
       painter: _CornerOverlayPainter(
@@ -630,7 +635,7 @@ class _CornerOverlayPainter extends CustomPainter {
 
   @override
   void paint(Canvas canvas, Size size) {
-    var path = Path()
+    final path = Path()
       ..lineTo(size.width, 0.0)
       ..arcToPoint(
         Offset(0.0, size.height),
@@ -709,6 +714,7 @@ class SimulatedDevice extends StatelessWidget {
   final Widget child;
   final GlobalKey<NavigatorState> navigatorKey;
 
+  @override
   Widget build(BuildContext context) {
     final mq = MediaQuery.of(context);
     final theme = Theme.of(context);
@@ -717,7 +723,7 @@ class SimulatedDevice extends StatelessWidget {
       math.min(size.width, mq.size.width),
       math.min(size.height - navBarHeight, mq.size.height - navBarHeight),
     );
-    var content = MediaQuery(
+    final content = MediaQuery(
       data: mq.copyWith(
         size: _size, //Size(size.width, size.height - navBarHeight),
         padding: padding,

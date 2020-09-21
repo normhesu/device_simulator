@@ -7,13 +7,13 @@ class FakeIOSStatusBar extends StatelessWidget {
   final bool roundedCorners;
   final bool notch;
 
-  final _uiStyle = TextStyle(
+  final _uiStyle = const TextStyle(
     fontFamilyFallback: ['.SF UI Display'],
     fontSize: 12.0,
     fontWeight: FontWeight.w600,
   );
 
-  final _uiStyleNotch = TextStyle(
+  final _uiStyleNotch = const TextStyle(
     fontFamilyFallback: ['.SF UI Display'],
     fontSize: 15.0,
     fontWeight: FontWeight.w600,
@@ -96,7 +96,7 @@ class FakeIOSMultitaskBar extends StatelessWidget {
           height: tablet ? 5.0 : 4.0,
           decoration: BoxDecoration(
             color: color,
-            borderRadius: BorderRadius.all(Radius.circular(4.0)),
+            borderRadius: const BorderRadius.all(Radius.circular(4.0)),
           ),
         ),
       ),

@@ -6,6 +6,7 @@ class DisabledDeviceSimulator extends StatefulWidget {
 
   DisabledDeviceSimulator({this.child, this.style});
 
+  @override
   _DisabledDeviceSimulatorState createState() =>
       _DisabledDeviceSimulatorState();
 }
@@ -35,15 +36,15 @@ class _DisabledDeviceSimulatorState extends State<DisabledDeviceSimulator> {
                 right: 0.0,
                 child: Center(
                   child: Padding(
-                    padding: EdgeInsets.all(24.0),
+                    padding: const EdgeInsets.all(24.0),
                     child: Card(
-                      shape: RoundedRectangleBorder(
+                      shape: const RoundedRectangleBorder(
                         borderRadius: BorderRadius.all(Radius.circular(16.0)),
                       ),
                       elevation: 8.0,
                       color: Colors.black,
                       child: Padding(
-                        padding: EdgeInsets.all(16.0),
+                        padding: const EdgeInsets.all(16.0),
                         child: Text(
                           'DeviceSimulator is enabled, but the screen size is too small. This widget is best used on tablets.',
                           style: widget.style,

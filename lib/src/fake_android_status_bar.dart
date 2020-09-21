@@ -11,15 +11,15 @@ class FakeAndroidStatusBar extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    double padding = 2.0;
-    TextStyle style = TextStyle(
+    const double padding = 2.0;
+    const TextStyle style = TextStyle(
       fontFamilyFallback: ['Roboto'],
       fontWeight: FontWeight.w500,
       fontSize: 15.0,
       color: Colors.white,
     );
 
-    double iconSize = min(height - padding * 2, 22.0);
+    final double iconSize = min(height - padding * 2, 22.0);
 
     final child = Container(
       padding: EdgeInsets.symmetric(horizontal: horizontalPadding),
@@ -27,7 +27,7 @@ class FakeAndroidStatusBar extends StatelessWidget {
       color: backgroundColor,
       child: Row(
         children: <Widget>[
-          Text(
+          const Text(
             '1:37 PM',
             style: style,
           ),
@@ -35,7 +35,7 @@ class FakeAndroidStatusBar extends StatelessWidget {
             child: Container(),
           ),
           Padding(
-            padding: EdgeInsets.all(padding),
+            padding: const EdgeInsets.all(padding),
             child: Icon(
               Icons.network_wifi,
               color: Colors.white,
@@ -43,7 +43,7 @@ class FakeAndroidStatusBar extends StatelessWidget {
             ),
           ),
           Padding(
-            padding: EdgeInsets.all(padding),
+            padding: const EdgeInsets.all(padding),
             child: Icon(
               Icons.battery_full,
               color: Colors.white,
@@ -80,7 +80,7 @@ class FakeAndroidNavBar extends StatelessWidget {
             Expanded(
               child: Container(),
             ),
-            Expanded(
+            const Expanded(
               child: RotatedBox(
                 quarterTurns: 2,
                 child: Icon(
@@ -105,7 +105,7 @@ class FakeAndroidNavBar extends StatelessWidget {
                   ),
                   Center(
                     child: Container(
-                      decoration: BoxDecoration(
+                      decoration: const BoxDecoration(
                         shape: BoxShape.circle,
                         color: Colors.white,
                       ),
@@ -116,7 +116,7 @@ class FakeAndroidNavBar extends StatelessWidget {
                 ],
               ),
             ),
-            Expanded(
+            const Expanded(
               child: Icon(
                 Icons.stop,
                 color: Colors.white,

@@ -1,0 +1,96 @@
+analyzer:
+  errors:
+    missing_required_param: warning
+    missing_return: warning
+
+linter:
+  rules:
+    - await_only_futures
+    - camel_case_types
+    - cancel_subscriptions
+    - close_sinks
+    - constant_identifier_names
+    - control_flow_in_finally
+    - empty_statements
+    - hash_and_equals
+    - implementation_imports
+    - non_constant_identifier_names
+    - package_api_docs
+    - package_names
+    - package_prefixed_library_names
+    - test_types_in_equals
+    - throw_in_finally
+    - unnecessary_getters_setters
+    - unnecessary_new
+    - unnecessary_statements
+
+    - avoid_empty_else
+    - avoid_init_to_null
+    - avoid_relative_lib_imports
+    - avoid_return_types_on_setters
+    - avoid_shadowing_type_parameters
+    - avoid_types_as_parameter_names
+    - empty_catches
+    - empty_constructor_bodies
+    - library_names
+    - library_prefixes
+    - no_duplicate_case_values
+    - null_closures
+    - prefer_contains
+    - prefer_equal_for_default_values
+    - prefer_is_empty
+    - prefer_is_not_empty
+    - prefer_iterable_whereType
+    - recursive_getters
+    - slash_for_doc_comments
+    - type_init_formals
+    - unnecessary_const
+    - unnecessary_null_in_if_null_operators
+    - unrelated_type_equality_checks
+    - use_rethrow_when_possible
+    - valid_regexps
+
+    - always_declare_return_types
+    - always_require_non_null_named_parameters
+    - annotate_overrides
+    - avoid_void_async
+    - avoid_bool_literals_in_conditional_expressions
+    - avoid_equals_and_hash_code_on_mutable_classes
+    - avoid_field_initializers_in_const_classes
+    - avoid_function_literals_in_foreach_calls
+    - avoid_null_checks_in_equality_operators
+    - avoid_renaming_method_parameters
+    - avoid_returning_null_for_void
+    - avoid_single_cascade_in_expression_statements
+    - avoid_slow_async_io
+    - avoid_unused_constructor_parameters
+    - camel_case_extensions
+    - list_remove_unrelated_type
+    - no_adjacent_strings_in_list
+    - overridden_fields
+    - prefer_adjacent_string_concatenation
+    - prefer_asserts_in_initializer_lists
+    - prefer_conditional_assignment
+    - prefer_const_constructors
+    - prefer_const_declarations
+    - prefer_const_literals_to_create_immutables
+    - prefer_final_fields
+    - prefer_final_in_for_each
+    - prefer_final_locals
+    - prefer_for_elements_to_map_fromIterable
+    - prefer_foreach
+    - prefer_generic_function_type_aliases
+    - prefer_if_elements_to_conditional_expressions
+    - prefer_initializing_formals
+    - prefer_inlined_adds
+    - prefer_spread_collections
+    - sort_pub_dependencies
+    - sort_unnamed_constructors_first
+    - unnecessary_null_aware_assignments
+    - unnecessary_overrides
+    - unnecessary_parenthesis
+    - unnecessary_this
+    - use_full_hex_values_for_flutter_colors
+    - void_checks
+
+    - exhaustive_cases
