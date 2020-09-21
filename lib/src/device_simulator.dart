@@ -28,6 +28,14 @@ const _kTextStyle = TextStyle(
   decoration: TextDecoration.none,
 );
 
+class ContentMargin {
+  ContentMargin({num top = 0.0, num bottom = 0.0})
+      : top = top.toDouble(),
+        bottom = bottom.toDouble();
+  final double top;
+  final double bottom;
+}
+
 /// A constant that is true if the application was compiled to run on the web.
 ///
 /// This implementation takes advantage of the fact that JavaScript does not
@@ -102,6 +110,8 @@ class DeviceSimulator extends StatefulWidget {
 
   final ToolbarPosition toolbarPosition;
 
+  final ContentMargin contentMargin;
+
   /// Creates a new [DeviceSimulator].
   DeviceSimulator({
     @required this.child,
@@ -112,6 +122,7 @@ class DeviceSimulator extends StatefulWidget {
     this.androidStatusBarBackgroundColor = Colors.black26,
     this.silentlyDisableOnSmallDevices = false,
     this.toolbarPosition = ToolbarPosition.bottom,
+    ContentMargin contentMargin,
     double smallDeviceWidth,
     double smallDeviceHeight,
     this.initialPlatform = TargetPlatform.iOS,
@@ -127,7 +138,8 @@ class DeviceSimulator extends StatefulWidget {
         assert(specs == null || specs.isNotEmpty),
         assert(enableScreenshots != null),
         smallDeviceWidth = smallDeviceWidth ?? smallDeviceHeight ?? 768.0,
-        smallDeviceHeight = smallDeviceHeight ?? smallDeviceWidth ?? 768.0;
+        smallDeviceHeight = smallDeviceHeight ?? smallDeviceWidth ?? 768.0,
+        contentMargin = contentMargin ?? ContentMargin();
 
   @override
   _DeviceSimulatorState createState() => _DeviceSimulatorState();
@@ -495,6 +507,9 @@ class _DeviceSimulatorState extends State<DeviceSimulator> {
         children: <Widget>[
           if (!_screenshotMode && widget.toolbarPosition == ToolbarPosition.top)
             _toolbar,
+          SizedBox(
+            height: widget.contentMargin.top,
+          ),
           Expanded(
             child: Align(
               alignment: _screenshotMode ? Alignment.topLeft : Alignment.center,
@@ -504,6 +519,9 @@ class _DeviceSimulatorState extends State<DeviceSimulator> {
                 child: clippedContent,
               ),
             ),
+          ),
+          SizedBox(
+            height: widget.contentMargin.bottom,
           ),
           if (!_screenshotMode &&
               widget.toolbarPosition == ToolbarPosition.bottom)
