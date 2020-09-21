@@ -151,6 +151,8 @@ class _DeviceSimulatorState extends State<DeviceSimulator> {
   List<DeviceSpecification> _specs = [];
   bool _hasIosSpecs = false;
   bool _hasAndroidSpecs = false;
+  bool _initializedOrientation = false;
+  Orientation _orientation = Orientation.landscape;
 
   @override
   void initState() {
@@ -217,12 +219,17 @@ class _DeviceSimulatorState extends State<DeviceSimulator> {
       );
     }
 
+    if (!_initializedOrientation) {
+      _orientation = mq.orientation;
+      _initializedOrientation = true;
+    }
+
     final specs =
         _specs.where((device) => device.platform == _platform).toList();
     final spec = specs[_currentDevice];
 
     Size simulatedSize = spec.size;
-    if (mq.orientation == Orientation.landscape)
+    if (_orientation == Orientation.landscape)
       simulatedSize = simulatedSize.flipped;
 
     double navBarHeight = 0.0;
@@ -247,8 +254,8 @@ class _DeviceSimulatorState extends State<DeviceSimulator> {
     final double cornerRadius = _screenshotMode ? 0.0 : spec.cornerRadius;
 
     EdgeInsets padding = spec.padding;
-    if (mq.orientation == Orientation.landscape &&
-        spec.paddingLandscape != null) padding = spec.paddingLandscape;
+    if (_orientation == Orientation.landscape && spec.paddingLandscape != null)
+      padding = spec.paddingLandscape;
 
     final device = SimulatedDevice(
       key: _contentKey,
@@ -289,7 +296,7 @@ class _DeviceSimulatorState extends State<DeviceSimulator> {
     final Size notchSize =
         _screenshotMode ? Size.zero : spec.notchSize ?? Size.zero;
     Widget notch;
-    if (mq.orientation == Orientation.landscape) {
+    if (_orientation == Orientation.landscape) {
       notch = Positioned(
         left: 0.0,
         top: (simulatedSize.height - notchSize.width) / 2.0,
@@ -497,6 +504,26 @@ class _DeviceSimulatorState extends State<DeviceSimulator> {
                 },
               ),
             ),
+          VerticalDivider(
+            color: _kDividerColor,
+            indent: 4.0,
+          ),
+          IconButton(
+            icon: const Icon(
+              Icons.screen_rotation,
+              color: Colors.white,
+              size: 22.0,
+            ),
+            onPressed: () {
+              setState(() {
+                if (_orientation == Orientation.landscape) {
+                  _orientation = Orientation.portrait;
+                } else {
+                  _orientation = Orientation.landscape;
+                }
+              });
+            },
+          ),
         ],
       ),
     );

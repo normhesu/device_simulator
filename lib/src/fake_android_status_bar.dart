@@ -19,7 +19,7 @@ class FakeAndroidStatusBar extends StatelessWidget {
       color: Colors.white,
     );
 
-    final double iconSize = min(height - padding * 2, 22.0);
+    final double iconSize = min(max(height - padding * 2, 0), 22.0);
 
     final child = Container(
       padding: EdgeInsets.symmetric(horizontal: horizontalPadding),
