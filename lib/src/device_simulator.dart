@@ -157,7 +157,14 @@ class _DeviceSimulatorState extends State<DeviceSimulator> {
   @override
   void initState() {
     super.initState();
-    if (widget.enable) SystemChrome.setEnabledSystemUIOverlays([]);
+    if (widget.enable) {
+      SystemChrome.setEnabledSystemUIOverlays([]);
+    } else {
+      SystemChrome.setEnabledSystemUIOverlays([
+        SystemUiOverlay.top,
+        SystemUiOverlay.bottom,
+      ]);
+    }
     final initialPlatform = widget.initialPlatform ?? defaultTargetPlatform;
     switch (initialPlatform) {
       case TargetPlatform.android:
